@@ -1,0 +1,32 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 1rem;
+  }
+  
+  .navbar-logo h1 {
+    color: #fff;
+    margin: 0;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .navbar-logo {
+    text-decoration: none;
+  }
+
+
+  .navbar-links a, .navbar-logo {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .navbar-links a:hover, .navbar-logo {
+    text-decoration: underline;
+  }
