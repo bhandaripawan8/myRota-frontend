@@ -4,6 +4,7 @@ import axios from "axios";
 import useAuthStore from "../../Store/AuthStore";
 import "./Authenticate.css";
 import { API_BASE_URL } from "../../src/Config";
+import {toast} from 'react-toastify';
 
 
 const Login = () => {
@@ -17,21 +18,23 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+  
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/api/v1/auth/login`,
-        { email, password }
-      );
-
+      const response = await axios.post(`${API_BASE_URL}/api/v1/auth/login`, { email, password });
       const { user, token } = response.data;
-      setUser({ ...user, token }); // Save user data in Zustand
+  
+      // Save user and token
+      setUser({ ...user, token }); 
       localStorage.setItem("token", token);
-      console.log("Login successful", user);
+      localStorage.setItem("user", JSON.stringify(user));
+      toast.success("Login successful!");
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.error || "Login failed. Please try again.");
+      toast.error("Login failed. Please try again.");
     }
   };
+  
 
   return (
     <div className="auth-container">

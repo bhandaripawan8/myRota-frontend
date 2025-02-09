@@ -8,11 +8,14 @@ import Footer from "./components/Footer/Footer";
 import RegisterCompany from "../pages/RegisterCompany/RegisterCompany";
 import RegistrationSuccess from "../pages/authentication/UserRegistrationSuccess";
 import SuccessPage from "../pages/RegisterCompany/SuccessPage";
+import { ToastContainer } from "react-toastify";
+import EmployerDashboard from "../pages/Dashboard/EmployerDashboard";
+
 
 function App() {
   return (
     <>
-    <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -20,8 +23,10 @@ function App() {
         <Route path="/registercompany" element={<RegisterCompany />} />
         <Route path="/registercompany/success" element={<SuccessPage />} />
         <Route path="/register/success" element={<RegistrationSuccess />} />
+        <Route path="/dashboard/employer/*" element={<EmployerDashboard />} />
       </Routes>
-      <Footer/>
+      <Footer />
+      <ToastContainer />
     </>
   );
 }
