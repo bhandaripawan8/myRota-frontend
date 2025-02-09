@@ -3,6 +3,8 @@ import './Authenticate.css'; // Import the custom CSS
 import useAuthStore from '../../Store/AuthStore';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -48,7 +50,7 @@ const Register = () => {
       setUser(user);
       console.log(user);
       try {
-        const response = await axios.post('http://localhost:4000/api/v1/auth/register', user);
+        const response = await axios.post(`${API_BASE_URL}/api/v1/auth/register`, user);
         console.log(response);
         if (response.status === 201) {
           setResponseMessage(response.data.message);

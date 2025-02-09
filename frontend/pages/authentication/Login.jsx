@@ -1,24 +1,43 @@
-import React, { useState } from 'react';
-import './Authenticate.css'; // Import the custom CSS
-import useAuthStore from '../../Store/AuthStore';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
+import axios from "axios";
+import useAuthStore from "../../Store/AuthStore";
+import "./Authenticate.css";
+import { API_BASE_URL } from "../../src/Config";
+
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const setUser = useAuthStore((state) => state.setUser);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    const user = { email, password }; // Replace with actual login logic
-    setUser(user);
-    console.log(user);
+    setError("");
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/v1/auth/login`,
+        { email, password }
+      );
+
+      const { user, token } = response.data;
+      setUser({ ...user, token }); // Save user data in Zustand
+      localStorage.setItem("token", token);
+      console.log("Login successful", user);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.error || "Login failed. Please try again.");
+    }
   };
 
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Login</h2>
+        {error && <p className="error-message">{error}</p>}
         <input
           type="email"
           placeholder="Email"
@@ -34,10 +53,12 @@ const Login = () => {
           required
         />
         <button type="submit">Login</button>
-        <a href="/register" className="auth-link">Don't have an account? Register</a>
+        <a href="/register" className="auth-link">
+          Don't have an account? Register
+        </a>
       </form>
     </div>
   );
-}
+};
 
 export default Login;

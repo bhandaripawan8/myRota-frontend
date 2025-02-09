@@ -1,4 +1,6 @@
-import { create } from 'zustand';  // Correct import
+import { create } from 'zustand';  
+import { API_BASE_URL } from '../src/Config'
+
 
 const useCompanyStore = create((set) => ({
   loading: false,
@@ -6,7 +8,7 @@ const useCompanyStore = create((set) => ({
   registerCompany: async (formData) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetch('/api/v1/company/registercompany', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/company/registercompany`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
