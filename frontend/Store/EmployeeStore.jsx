@@ -53,6 +53,23 @@ const useEmployeeStore = create((set) => ({
       console.error('Error deleting employee:', error);
     }
   },
+  toggleEmployeeStatus: async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(`${API_BASE_URL}/api/employees/${id}/toggle-status`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      set((state) => ({
+        employees: state.employees.map((employee) =>
+          employee.id === id ? { ...employee, active: response.data.active } : employee
+        ),
+      }));
+    } catch (error) {
+      console.error('Error toggling employee status:', error);
+    }
+  },
 }));
 
 export default useEmployeeStore;

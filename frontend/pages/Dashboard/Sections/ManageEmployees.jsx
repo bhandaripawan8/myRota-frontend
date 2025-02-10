@@ -1,91 +1,71 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import useEmployeeStore from "../../../Store/EmployeeStore";
+// import "./ManageEmployees.css";
 
 const ManageEmployees = () => {
-  const { employees, fetchEmployees, addEmployee, deleteEmployee } = useEmployeeStore();
-  const [newEmployee, setNewEmployee] = useState({ name: "", email: "", role: "" });
-  const [error, setError] = useState("");
+  const { employees, fetchEmployees, deleteEmployee, toggleEmployeeStatus } = useEmployeeStore();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const loadEmployees = async () => {
-      await fetchEmployees();
-    };
-    loadEmployees();
+    fetchEmployees();
   }, [fetchEmployees]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewEmployee({ ...newEmployee, [name]: value });
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
-  const handleAddEmployee = async (e) => {
-    e.preventDefault();
-    if (!newEmployee.name || !newEmployee.email || !newEmployee.role) {
-      setError("All fields are required");
-      return;
-    }
-    setError("");
-    await addEmployee(newEmployee);
-    setNewEmployee({ name: "", email: "", role: "" });
-  };
+  const filteredEmployees = employees.filter((employee) =>
+    employee.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-2xl font-semibold text-gray-700 text-center">Manage Employees</h1>
-
-      {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
-
-      {/* Employee Form */}
-      <form className="mt-4 space-y-4" onSubmit={handleAddEmployee}>
+      <div className="mt-4 mb-6">
         <input
           type="text"
-          name="name"
-          placeholder="Name"
-          value={newEmployee.name}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Search by name"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="w-full px-4 py-2 border rounded-md"
         />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={newEmployee.email}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <input
-          type="text"
-          name="role"
-          placeholder="Role"
-          value={newEmployee.role}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-        >
-          Add Employee
-        </button>
-      </form>
-
-      {/* Employee List */}
-      <ul className="mt-6 divide-y divide-gray-200">
-        {employees.map((employee) => (
-          <li key={employee.id} className="flex justify-between items-center py-3">
-            <span className="text-gray-600">{employee.name} - {employee.email} - {employee.role}</span>
-            <button
-              onClick={() => deleteEmployee(employee.id)}
-              className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+      </div>
+      <table className="min-w-full mt-6 divide-y divide-gray-200">
+        <thead>
+          <tr>
+            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email Address</th>
+            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th className="px-6 py-3 bg-gray-50"></th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {filteredEmployees.map((employee) => (
+            <tr key={employee.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{employee.name}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.email}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.role}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <button
+                  onClick={() => toggleEmployeeStatus(employee.id)}
+                  className={`px-3 py-1 rounded-md transition duration-300 ${employee.active ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-500 text-white hover:bg-gray-600'}`}
+                >
+                  {employee.active ? 'Active' : 'Inactive'}
+                </button>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button
+                  onClick={() => deleteEmployee(employee.id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
