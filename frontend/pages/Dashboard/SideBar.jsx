@@ -2,16 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useSidebarStore from "../../Store/SideBarStore";
 import useAuthStore from "../../Store/AuthStore";
-import { 
-  FaBars, 
-  FaCalendarAlt, 
-  FaUsers, 
-  FaClipboardList, 
+import {
+  FaBars,
+  FaCalendarAlt,
+  FaUsers,
+  FaClipboardList,
   FaChartBar,
   FaClock,
   FaCalendarCheck,
   FaCalendarWeek,
-  FaPlane
+  FaPlane,
+  FaNetworkWired,
 } from "react-icons/fa";
 import "./Sidebar.css";
 
@@ -24,6 +25,11 @@ const Sidebar = () => {
       <li>
         <Link to="/dashboard/employer">
           <FaChartBar /> <span>Dashboard</span>
+        </Link>
+      </li>
+      <li>
+        <Link to="/dashboard/employer/set-shifts">
+          <FaNetworkWired /> <span>Set Shifts</span>
         </Link>
       </li>
       <li>
@@ -80,7 +86,7 @@ const Sidebar = () => {
         <FaBars />
       </button>
       <ul className="sidebar-menu">
-        {user?.role === 'employer' ? <EmployerLinks /> : <EmployeeLinks />}
+        {user?.role === "employer" ? <EmployerLinks /> : <EmployeeLinks />}
       </ul>
     </div>
   );

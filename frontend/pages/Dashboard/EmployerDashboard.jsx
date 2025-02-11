@@ -4,6 +4,7 @@ import ManageShifts from "./sections/ManageShifts";
 import ManageEmployees from "./sections/ManageEmployees";
 import ShiftRequests from "./sections/ShiftRequests";
 import "./EmployerDashboard.css";
+import SetShifts from "./Sections/SetShifts";
 
 const EmployerDashboard = () => {
   const location = useLocation();
@@ -16,6 +17,8 @@ const EmployerDashboard = () => {
         return <ManageEmployees />;
       case "/dashboard/employer/manage-shift-requests":
         return <ShiftRequests />;
+        case "/dashboard/employer/set-shifts":
+          return <SetShifts />;
       default:
         return <h2>Employer Dashboard</h2>;
     }

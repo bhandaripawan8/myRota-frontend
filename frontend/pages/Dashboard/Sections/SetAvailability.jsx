@@ -2,7 +2,9 @@ import React from 'react'
 
 const SetAvailability = () => {
   return (
-    <div>SetAvailability</div>
+    <div>
+      <h2>Set your Availability</h2>
+    </div>
   )
 }
 
