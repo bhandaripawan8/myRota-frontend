@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import ManageShifts from "./sections/ManageShifts";
 import ManageEmployees from "./sections/ManageEmployees";
 import ShiftRequests from "./sections/ShiftRequests";

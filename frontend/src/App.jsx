@@ -10,7 +10,9 @@ import RegistrationSuccess from "../pages/authentication/UserRegistrationSuccess
 import SuccessPage from "../pages/RegisterCompany/SuccessPage";
 import { ToastContainer } from "react-toastify";
 import EmployerDashboard from "../pages/Dashboard/EmployerDashboard";
-import ProtectedRoute from "../pages/protected-routes/ProtectedRoutes";
+import EmployerProtectedRoutes from "../pages/protected-routes/EmployerProtectedRoutes";
+import EmployeeProtectedRoutes from "../pages/protected-routes/EmployeeProtectedRoutes";
+import EmployeeDashboard from "../pages/Dashboard/EmployeeDashboard";
 
 
 function App() {
@@ -24,7 +26,8 @@ function App() {
         <Route path="/registercompany" element={<RegisterCompany />} />
         <Route path="/registercompany/success" element={<SuccessPage />} />
         <Route path="/register/success" element={<RegistrationSuccess />} />
-        <Route path="/dashboard/employer/*" element={<ProtectedRoute><EmployerDashboard /></ProtectedRoute>} />
+        <Route path="/dashboard/employer/*" element={<EmployerProtectedRoutes><EmployerDashboard /></EmployerProtectedRoutes>} />
+        <Route path="/dashboard/employee/*" element={<EmployeeProtectedRoutes><EmployeeDashboard /></EmployeeProtectedRoutes>} />
       </Routes>
       <Footer />
       <ToastContainer />
