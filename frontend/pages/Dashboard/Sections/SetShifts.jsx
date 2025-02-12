@@ -21,19 +21,27 @@ const SetShifts = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const shiftData = {
-      ...formData,
-      createdBy: user._id,
-      uniqueId: user.company_unique_id,
-    };
+    try {
+      const shiftData = {
+        ...formData,
+        createdBy: user._id,
+        uniqueId: user.company_unique_id,
+      };
 
-    if (editingShift) {
-      await updateShift(editingShift._id, shiftData);
-    } else {
-      await createShift(shiftData);
+      if (editingShift) {
+        await updateShift(editingShift._id, shiftData);
+      } else {
+        const newShift = await createShift(shiftData);
+        console.log('New shift created:', newShift);
+      }
+
+      // Fetch updated shifts
+      await fetchShifts();
+      resetForm();
+    } catch (error) {
+      console.error('Error handling shift:', error);
+      // Optionally add error handling UI here
     }
-
-    resetForm();
   };
 
   const handleEdit = (shift) => {
@@ -98,7 +106,11 @@ const SetShifts = () => {
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 capitalize">{field}</label>
                   <input
-                    type={field === 'description' ? 'text' : field === 'date' ? 'date' : 'time'}
+                    type={
+                      field === 'date' ? 'date' : 
+                      field === 'startTime' || field === 'endTime' ? 'time' : 
+                      'text'
+                    }
                     value={formData[field]}
                     onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
                     className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
