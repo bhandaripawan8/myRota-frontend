@@ -5,7 +5,6 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const formatShiftData = (shift) => ({
     ...shift,
-    date: new Date(shift.date).toISOString().split('T')[0],
     startTime: shift.startTime,
     endTime: shift.endTime,
   });
@@ -30,32 +29,25 @@ const useShiftStore = create((set) => ({
         `${API_BASE_URL}/api/v1/shifts/getshiftsbyemployerid/${employerId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-    //   console.log(response.data);
       set({ shifts: response.data.data, error: null });
     } catch (error) {
       set({ error: error.message });
     }
   },
   
-
   createShift: async (shiftData) => {
     try {
       set({ loading: true });
       const token = localStorage.getItem('token');
-      const formattedData = {
-        ...shiftData,
-        date: new Date(shiftData.date).toISOString(),
-      };
 
       const response = await axios.post(
         `${API_BASE_URL}/api/v1/shifts/createshifts`,
-        formattedData,
+        shiftData,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
 
-      // Format the response data
       const formattedShift = formatShiftData(response.data);
       
       set(state => ({
@@ -64,7 +56,7 @@ const useShiftStore = create((set) => ({
         error: null
       }));
 
-      return formattedShift; // Return the created shift
+      return formattedShift;
     } catch (error) {
       set({ error: error.message, loading: false });
       throw error;
@@ -93,7 +85,6 @@ const useShiftStore = create((set) => ({
     }
   },
   
-
   deleteShift: async (id) => {
     try {
       const token = localStorage.getItem('token');

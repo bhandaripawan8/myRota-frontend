@@ -10,7 +10,6 @@ const SetShifts = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    date: '',
     startTime: '',
     endTime: '',
   });
@@ -35,12 +34,10 @@ const SetShifts = () => {
         console.log('New shift created:', newShift);
       }
 
-      // Fetch updated shifts
       await fetchShifts();
       resetForm();
     } catch (error) {
       console.error('Error handling shift:', error);
-      // Optionally add error handling UI here
     }
   };
 
@@ -49,7 +46,6 @@ const SetShifts = () => {
     setFormData({
       title: shift.title,
       description: shift.description || '',
-      date: shift.date.split('T')[0],
       startTime: shift.startTime,
       endTime: shift.endTime,
     });
@@ -57,7 +53,7 @@ const SetShifts = () => {
   };
 
   const resetForm = () => {
-    setFormData({ title: '', description: '', date: '', startTime: '', endTime: '' });
+    setFormData({ title: '', description: '', startTime: '', endTime: '' });
     setEditingShift(null);
     setIsModalOpen(false);
   };
@@ -76,7 +72,6 @@ const SetShifts = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-sm font-medium text-gray-600">Title</th>
-              <th className="px-6 py-3 text-sm font-medium text-gray-600">Date</th>
               <th className="px-6 py-3 text-sm font-medium text-gray-600">Time</th>
               <th className="px-6 py-3 text-sm font-medium text-gray-600">Actions</th>
             </tr>
@@ -85,7 +80,6 @@ const SetShifts = () => {
             {shifts.map((shift) => (
               <tr key={shift._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">{shift.title}</td>
-                <td className="px-6 py-4">{new Date(shift.date).toLocaleDateString()}</td>
                 <td className="px-6 py-4">{`${shift.startTime} - ${shift.endTime}`}</td>
                 <td className="px-6 py-4 flex space-x-4">
                   <button onClick={() => handleEdit(shift)} className="text-blue-500 hover:text-blue-700">Edit</button>
@@ -102,15 +96,11 @@ const SetShifts = () => {
           <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
             <h2 className="text-xl font-semibold mb-4">{editingShift ? 'Edit Shift' : 'Create New Shift'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {['title', 'description', 'date', 'startTime', 'endTime'].map((field) => (
+              {['title', 'description', 'startTime', 'endTime'].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 capitalize">{field}</label>
                   <input
-                    type={
-                      field === 'date' ? 'date' : 
-                      field === 'startTime' || field === 'endTime' ? 'time' : 
-                      'text'
-                    }
+                    type={field.includes('Time') ? 'time' : 'text'}
                     value={formData[field]}
                     onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
                     className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
